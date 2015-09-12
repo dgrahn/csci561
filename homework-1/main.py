@@ -5,26 +5,29 @@ class Node(object):
   def __init__(self, name):
     self.name  = name
     self.paths = []
+  #end __init__
+#end Node
 
 """
 A path between nodes.
 """
 class Path(object):
   def __init__(self):
-    print("Path")
+    self.start    = None
+    self.end      = None
     self.cost     = 0
     self.offtimes = []
+  #end ___init__
+#end Path
 
-class State(object):
-  def __init__(self):
-    print("State")
-
+"""
+An entire task. Includes algorithm, source, destination, and nodes.
+"""
 class Task(object):
 
   def __init__(self, file):
     self.algorithm    = readLine(file)
-    
-    self.source       = readLine(file)
+    self.source       = Node(readLine(file))
 
     # Destinations
     self.destinations = []
@@ -35,7 +38,7 @@ class Task(object):
     self.nodes = {}
     
     # -- Add the source
-    self.nodes[self.source] = Node(self.source)
+    self.nodes[self.source.name] = self.source
 
     # -- Add the destinations
     for node in self.destinations:
@@ -52,8 +55,29 @@ class Task(object):
 
     # Read Pipes
     for i in range(1, numberOfPipes + 1):
-      self.pipes.append(Pipe(file))
-      #print("\tReading Pipe " + str(i) + " = " + readLine(file))
+    
+      path = Path()
+      line = readLine(file).split()
+      path.start = line.pop(0)
+      path.end   = line.pop(0)
+      path.cost  = line.pop(0)
+      
+      numberOfPeriods = int(line.pop(0))
+
+      for _ in range(numberOfPeriods):
+        period    = line.pop(0).split("-")
+        startTime = int(period[0])
+        endTime   = int(period[1])
+        
+        for i in range(startTime, endTime + 1):
+          path.offtimes.append(i)
+        #end
+      #end
+        
+      path.offtimes.sort()
+      self.nodes[path.start].paths.append(path)
+      
+    #end
       
     # Start Time
     self.startTime = int(readLine(file))
@@ -65,54 +89,30 @@ class Task(object):
   
   def __str__(self):
     line  = "Task:\n"
-    line += "\t   Algorithm = " + self.algorithm + "\n"
-    line += "\t      Source = " + self.source + "\n"
+    line += "\tAlgorithm = " + self.algorithm + "\n"
+    line += "\tSource = " + self.source.name + "\n"
     
-    line += "\tDestinations:\n"
+    line += "\tDestinations = "
+    
     for node in self.destinations:
-      line += "\t\tName = " + node.name
+      line += node.name + ", "
+    line += "\n"
     
     line += "\tNodes:\n"
-    for node in self.nodes:
-      line += "\t\tName = " + node.name
-    
-    line += "\t       Pipes = " + str(len(self.pipes)) + "\n"
-    for p in self.pipes: line += p.__str__() + "\n"
+    for name in self.nodes:
+      node = self.nodes[name]
+      line += "\t\t" + node.name + ":\n"
+
+      for path in node.paths:
+        line += "\t\t\tStart = " + path.start + "\n"
+        line += "\t\t\t  End = " + path.end   + "\n"
+        line += "\t\t\t Cost = " + path.cost  + "\n"
+        line += "\t\t\t  Off = " + ", ".join(str(x) for x in path.offtimes) + "\n\n"
+
     return(line)
-  #end str
+  #end __str__
 
 #end Task
-    
-  
-class Pipe(object):
-  
-  def __init__(self, file):
-    line = readLine(file).split()
-    self.start    = line.pop(0)
-    self.end      = line.pop(0)
-    self.length   = line.pop(0)
-    self.offTimes = []
-    
-    numberOfPeriods = int(line.pop(0))
-    
-    for _ in range(numberOfPeriods):
-      period = line.pop(0).split("-")
-      startTime = int(period[0])
-      endTime = int(period[1])
-      
-      for i in range(startTime, endTime + 1):
-        self.offTimes.append(i)
-  #end __main__   
-
-  def __str__(self):
-    line  = "\tPipe:\n"
-    line += "\t\t    Start = " + self.start + "\n"
-    line += "\t\t      End = " + self.end + "\n"
-    line += "\t\t   Length = " + self.length + "\n"
-    line += "\t\tOff Times = " + ",".join(str(x) for x in self.offTimes)
-    return line
-  #end __str__
-#end Pipe
 
 def main():
   print("Starting...")
@@ -135,7 +135,6 @@ def main():
     
 def readLine(file):
   return file.readline().rstrip('\n')
-
 #end readTask
 
 

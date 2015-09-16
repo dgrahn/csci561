@@ -1,4 +1,5 @@
 from bfs import BFS
+from dfs import DFS
 import operator
 import sys
 
@@ -125,7 +126,7 @@ class Task(object):
         #line += "\t\t\t  Off = " + ", ".join(str(x) for x in path.offtimes) + "\n\n"
 
     if self.solution is None:
-      line += "\tSolution = Not Run\n"
+      line += "\tSolution = None\n"
     else:
       line += "\tSolution = " + ", ".join(n.name for n in self.solution) + "\n"
 
@@ -136,18 +137,20 @@ class Task(object):
   
   def short_solution(self):
     if self.solution is None:
-      return "Not Run"
-    elif self.solution:
-      return self.solution[-1].name + " " + str(self.end_time)
-    else:
       return "None"
+    else:
+      return self.solution[-1].name + " " + str(self.end_time)
   #end short_solution
   
   def run(self):
-    #if self.algorithm == "DFS":
-    if self.algorithm == "BFS":
+    if self.algorithm == "DFS":
+      self.solution = DFS.run(self.source, self.destinations)
+      if self.solution is not None:
+        self.end_time = self.start_time + len(self.solution) - 1
+    elif self.algorithm == "BFS":
       self.solution = BFS.run(self.source, self.destinations)
-      self.end_time = self.start_time + len(self.solution) - 1
+      if self.solution is not None:
+        self.end_time = self.start_time + len(self.solution) - 1
     #elif self.algorithm == "UCS":
     else:
       print("Unexcepted Algorithm = " + self.algorithm)

@@ -1,8 +1,8 @@
+DEBUG = False
+
 """
 An implementation of the BFS algorithm.
 """
-DEBUG = False
-
 class BFS:
 
   @staticmethod
@@ -51,7 +51,7 @@ class BFS:
       
     # Failure
     if DEBUG: print("Failure!")
-    return []
+    return None
 
   #end run
   

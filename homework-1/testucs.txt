@@ -1,0 +1,25 @@
+2
+UCS
+A
+D
+B C
+4
+A B 1 0
+A C 3 0
+B D 10 0
+C D 4 0
+3
+
+UCS
+A
+F
+B C D E
+7
+A B 3 0
+A C 1 0
+B D 10 0
+B E 2 0
+C E 5 0
+D F 3 0
+E F 3 0
+3

@@ -1,5 +1,6 @@
 from bfs import BFS
 from dfs import DFS
+from ucs import UCS
 import operator
 import sys
 
@@ -21,6 +22,11 @@ class Node(object):
       
     return children
   #end children
+  
+  def cheap_paths(self):
+    self.paths.sort(key=operator.attrgetter("cost"))
+    return self.paths
+  #end cheap_children
 #end Node
 
 """
@@ -151,7 +157,9 @@ class Task(object):
       self.solution = BFS.run(self.source, self.destinations)
       if self.solution is not None:
         self.end_time = self.start_time + len(self.solution) - 1
-    #elif self.algorithm == "UCS":
+    elif self.algorithm == "UCS":
+      self.solution = UCS.run(self.start_time, self.source, self.destinations)
+      self.end_time = self.solution.pop(0)
     else:
       print("Unexcepted Algorithm = " + self.algorithm)
   #end run

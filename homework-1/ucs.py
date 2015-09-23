@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 """
 An implementation of the UCS algorithm.
@@ -23,12 +23,12 @@ class UCS:
       node = path[-1]
       time = path[0]
       
+      if DEBUG: print("Exploring " + str(path[0]) + " = " + " ".join(n.name for n in path[1:]))
       
       if node in finish:
-        return new_path
+        if DEBUG: print("\tSolution")
+        return path
       #end if child in finish
-
-      if DEBUG: print(str(path[0]) + " = " + " ".join(n.name for n in path[1:]))
       
       explored.add(node)
       

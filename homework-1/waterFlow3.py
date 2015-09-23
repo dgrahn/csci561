@@ -31,8 +31,8 @@ class Node(object):
       if time in p.offtimes:
         continue
       valid_paths.append(p)
-      
-    valid_paths.sort(key=operator.attrgetter("cost"))
+
+    valid_paths.sort(key=lambda x: (x.cost, x.end.name))
     
     return valid_paths
   #end cheap_children
@@ -162,22 +162,23 @@ class Task(object):
       self.solution = DFS.run(self.source, self.destinations)
       if self.solution is not None:
         self.end_time = self.start_time + len(self.solution) - 1
+        self.end_time = self.end_time % 24
     elif self.algorithm == "BFS":
       self.solution = BFS.run(self.source, self.destinations)
       if self.solution is not None:
         self.end_time = self.start_time + len(self.solution) - 1
+        self.end_time = self.end_time % 24
     elif self.algorithm == "UCS":
       self.solution = UCS.run(self.start_time, self.source, self.destinations)
       if self.solution is not None:
         self.end_time = self.solution.pop(0)
     else:
-      print("Unexcepted Algorithm = " + self.algorithm)
+      raise Exception("Unexpected Algorithm = " + self.algorithm)
   #end run
 
 #end Task
 
 def main(file):
-  print("Starting...")
   
   # Open the file
   file = open(file)
@@ -185,14 +186,17 @@ def main(file):
   
   # Read the number of tasks
   numberOfTasks = int(file.readline())
-  print("Number of Tasks = " + str(numberOfTasks))
   
   for i in range(1, numberOfTasks + 1):
-    print("Reading Task " + str(i))
-    task = Task(file)
-    task.run()
-    output.write(task.short_solution() + "\n")
-    print(task)
+    try:
+      task = Task(file)
+      task.run()
+      output.write(task.short_solution() + "\n")
+      print(task.short_solution())
+    except Exception:
+      output.write("None\n")
+      print("Err")
+    
     
   # Close the file
   file.close()

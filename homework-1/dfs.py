@@ -1,4 +1,4 @@
-DEBUG = True
+DEBUG = False
 
 """
 An implementation of the DFS algorithm.

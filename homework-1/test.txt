@@ -1,0 +1,290 @@
+22
+BFS
+A
+B
+
+1
+A B 5 0
+1
+
+DFS
+A
+B
+
+1
+A B 5 0
+1
+
+UCS
+A
+B
+
+1
+A B 5 0
+1
+
+BFS
+A
+B C
+
+2
+A B 5 0
+A C 2 0
+2
+
+DFS
+A
+B C
+
+2
+A B 5 0
+A C 2 0
+2
+
+UCS
+A
+B C D
+
+3
+A B 5 0
+A D 2 0
+A C 2 0
+2
+
+BFS
+A
+B
+
+0
+2
+
+DFS
+A
+B
+
+0
+2
+
+UCS
+A
+B
+
+0
+2
+
+UCS
+A
+C
+B
+2
+A B 2 1 1-10
+B C 2 0
+2
+
+UCS
+A
+C
+B
+2
+A B 3 2 1-2 4-10
+B C 5 2 1-5 7-10
+3
+
+DFS
+A
+C
+B
+3
+A B 1 0
+B C 1 0
+B A 1 0
+1
+
+DFS
+A
+Z
+B C D E F G H I J K L M N O P Q R S T U V W X Y
+25
+A B 1 0
+B C 1 0
+C D 1 0
+D E 1 0
+E F 1 0
+F G 1 0
+G H 1 0
+H I 1 0
+I J 1 0
+J K 1 0
+K L 1 0
+L M 1 0
+M N 1 0
+N O 1 0
+O P 1 0
+P Q 1 0
+Q R 1 0
+R S 1 0
+S T 1 0
+T U 1 0
+U V 1 0
+V W 1 0
+W X 1 0
+X Y 1 0
+Y Z 1 0
+1
+
+DFS
+A
+Z
+B C D E F G H I J K L M N O P Q R S T U V W X Y
+25
+A B 1 0
+B C 1 0
+C D 1 0
+D E 1 0
+E F 1 0
+F G 1 0
+G H 1 0
+H I 1 0
+I J 1 0
+J K 1 0
+K L 1 0
+L M 1 0
+M N 1 0
+N O 1 0
+O P 1 0
+P Q 1 0
+Q R 1 0
+R S 1 0
+S T 1 0
+T U 1 0
+U V 1 0
+V W 1 0
+W X 1 0
+X Y 1 0
+Y Z 1 0
+23
+
+BFS
+A
+Z
+B C D E F G H I J K L M N O P Q R S T U V W X Y
+25
+A B 1 0
+B C 1 0
+C D 1 0
+D E 1 0
+E F 1 0
+F G 1 0
+G H 1 0
+H I 1 0
+I J 1 0
+J K 1 0
+K L 1 0
+L M 1 0
+M N 1 0
+N O 1 0
+O P 1 0
+P Q 1 0
+Q R 1 0
+R S 1 0
+S T 1 0
+T U 1 0
+U V 1 0
+V W 1 0
+W X 1 0
+X Y 1 0
+Y Z 1 0
+1
+
+BFS
+A
+Z
+B C D E F G H I J K L M N O P Q R S T U V W X Y
+25
+A B 1 0
+B C 1 0
+C D 1 0
+D E 1 0
+E F 1 0
+F G 1 0
+G H 1 0
+H I 1 0
+I J 1 0
+J K 1 0
+K L 1 0
+L M 1 0
+M N 1 0
+N O 1 0
+O P 1 0
+P Q 1 0
+Q R 1 0
+R S 1 0
+S T 1 0
+T U 1 0
+U V 1 0
+V W 1 0
+W X 1 0
+X Y 1 0
+Y Z 1 0
+23
+
+Failure!
+A
+B
+
+1
+A B 1 0
+1
+
+DFS
+A
+AA B
+
+2
+A B 1 0
+A AA 1 0
+0
+
+BFS
+A
+AA B
+
+2
+A B 1 0
+A AA 1 0
+0
+
+UCS
+A
+AA B
+
+2
+A B 1 0
+A AA 1 0
+0
+
+UCS
+A
+F
+B C D E
+6
+A B 1 0
+A C 2 0
+B D 2 0
+C E 2 0
+D F 3 0
+E F 1 0
+5
+
+UCS
+A
+F
+B C D E
+6
+A B 1 5 1-4 7-9 10-11 11-12 12-15
+A C 2 0
+B D 2 0
+C E 2 0
+D F 3 0
+E F 1 1 8-9
+5

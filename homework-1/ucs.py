@@ -21,6 +21,7 @@ class UCS:
       # We are storing paths, so get the node too
       path = frontier.pop(0)
       node = path[-1]
+      time = path[0]
       
       
       if node in finish:
@@ -31,7 +32,7 @@ class UCS:
       
       explored.add(node)
       
-      for child_path in node.cheap_paths():
+      for child_path in node.cheap_paths(time):
         child = child_path.end
         
         if DEBUG: print("  -> " + child.name + " = " + str(child_path.cost), end="")
@@ -56,7 +57,7 @@ class UCS:
         if DEBUG: print()
 
         frontier.append(new_path)
-        frontier.sort(key=lambda x: x[0])
+        frontier.sort(key=lambda x: (x[0], x[-1].name))
 
     #end while frontier
       
@@ -69,7 +70,7 @@ class UCS:
   @staticmethod
   def new_path(path, child_path):
     new_path = list(path)
-    new_path[0] += child_path.cost
+    new_path[0] = (new_path[0] + child_path.cost) % 23
     new_path.append(child_path.end)
     return new_path
   #end new_path

@@ -23,9 +23,18 @@ class Node(object):
     return children
   #end children
   
-  def cheap_paths(self):
-    self.paths.sort(key=operator.attrgetter("cost"))
-    return self.paths
+  def cheap_paths(self, time):
+    
+    valid_paths = []
+    
+    for p in self.paths:
+      if time in p.offtimes:
+        continue
+      valid_paths.append(p)
+      
+    valid_paths.sort(key=operator.attrgetter("cost"))
+    
+    return valid_paths
   #end cheap_children
 #end Node
 
@@ -159,7 +168,8 @@ class Task(object):
         self.end_time = self.start_time + len(self.solution) - 1
     elif self.algorithm == "UCS":
       self.solution = UCS.run(self.start_time, self.source, self.destinations)
-      self.end_time = self.solution.pop(0)
+      if self.solution is not None:
+        self.end_time = self.solution.pop(0)
     else:
       print("Unexcepted Algorithm = " + self.algorithm)
   #end run
@@ -171,6 +181,7 @@ def main(file):
   
   # Open the file
   file = open(file)
+  output = open("output.txt", "w")
   
   # Read the number of tasks
   numberOfTasks = int(file.readline())
@@ -180,10 +191,12 @@ def main(file):
     print("Reading Task " + str(i))
     task = Task(file)
     task.run()
+    output.write(task.short_solution() + "\n")
     print(task)
     
   # Close the file
   file.close()
+  output.close()
   
 #end main
     

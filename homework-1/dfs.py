@@ -4,9 +4,15 @@ DEBUG = False
 An implementation of the DFS algorithm.
 """
 class DFS:
+  explored = []
 
   @staticmethod
-  def run(start, finish, explored=[]):
+  def run(start, finish, depth = 0):
+  
+    if depth == 0:
+      DFS.explored = []
+      
+    DFS.explored.append(start)
 
     if DEBUG: print("DFS exploring " + start.name)
 
@@ -17,10 +23,10 @@ class DFS:
     for child in start.children():
       if DEBUG: print("  -> " + child.name, end="")
       
-      if child in explored: continue
+      if child in DFS.explored: continue
       if child in finish: return [start, child]
       
-      results = DFS.run(child, finish, DFS.new_path(explored, child))
+      results = DFS.run(child, finish, depth + 1)
       if results is not None:
         return DFS.new_path(results, start)
 

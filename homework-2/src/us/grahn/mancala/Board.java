@@ -1,248 +1,314 @@
 package us.grahn.mancala;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
  * A Mancala board.
  *
  * @author Dan Grahn
+ * @status FINISHED
  */
 public class Board implements Cloneable {
 
-	private final static Random random = new Random(System.nanoTime());
+    private final static Random random = new Random(System.nanoTime());
 
-	private static String pad(final int number) {
-		return String.format("%4d", number);
-	}
+    private static String pad(final int number) {
+        return String.format("%4d", number);
+    }
 
-	/**
-	 * Returns a pseudo-random number between min and max, inclusive.
-	 * The difference between min and max can be at most
-	 * <code>Integer.MAX_VALUE - 1</code>.
-	 *
-	 * @param min Minimum value
-	 * @param max Maximum value.  Must be greater than min.
-	 * @return Integer between min and max, inclusive.
-	 * @see java.util.Random#nextInt(int)
-	 */
-	private static int randInt(int min, int max) {
+    /**
+     * Returns a pseudo-random number between min and max, inclusive.
+     * The difference between min and max can be at most
+     * <code>Integer.MAX_VALUE - 1</code>.
+     *
+     * @param min Minimum value
+     * @param max Maximum value.  Must be greater than min.
+     * @return Integer between min and max, inclusive.
+     * @see java.util.Random#nextInt(int)
+     */
+    private static int randInt(final int min, final int max) {
 
 
-	    // nextInt is normally exclusive of the top value,
-	    // so add 1 to make it inclusive
-	    return random.nextInt(max - min + 1) + min;
-	}
+        // nextInt is normally exclusive of the top value,
+        // so add 1 to make it inclusive
+        return random.nextInt(max - min + 1) + min;
+    }
 
-	public static Board random() {
+    /**
+     * Generates a random board.
+     *
+     * @return the random board. Never {@code null}.
+     */
+    public static Board random() {
 
-		final Board board = new Board(randInt(3, 10));
+        final Board board = new Board(randInt(3, 10));
 
-		for(int i = 0; i < board.getSize(); i++) {
-			board.setStones(Player.PLAYER, i, randInt(0, 1000));
-			board.setStones(Player.OPPONENT, i, randInt(0, 1000));
-		}
+        for(int i = 0; i < board.getSize(); i++) {
+            board.setStones(Player.PLAYER, i, randInt(0, 1000));
+            board.setStones(Player.OPPONENT, i, randInt(0, 1000));
+        }
 
-		return board;
-	}
+        return board;
+    }
 
-	private final int[] board;
+    private final int[] board;
 
-	private final int size;
+    private final int size;
 
-	/**
-	 * Constructs a new Mancala {@code Board}.
-	 *
-	 * @param size the size of the board in terms of the number of pits for a
-	 *             single player, not including mancalas
-	 */
-	public Board(final int size) {
+    /**
+     * Constructs a new Mancala {@code Board}.
+     *
+     * @param size the size of the board in terms of the number of pits for a
+     *             single player, not including mancalas
+     */
+    public Board(final int size) {
 
-		this.size  = size;
-		this.board = new int[size * 2 + 2];
-	}
+        this.size  = size;
+        this.board = new int[size * 2 + 2];
+    }
 
-	/**
-	 * Constructs a new Mancala {@code Board} as a clone of a previous board.
-	 *
-	 * @param board
-	 */
-	private Board(final int[] board) {
+    /**
+     * Constructs a new Mancala {@code Board} as a clone of a previous board.
+     *
+     * @param board
+     */
+    private Board(final int[] board) {
 
-		this.size  = (board.length - 2) / 2;
-		this.board = board;
-	}
+        this.size  = (board.length - 2) / 2;
+        this.board = board;
+    }
 
-	public void addMancala(final Player player, final int stones) {
-		board[getMancalaLocation(player)] += stones;
-	}
+    /**
+     * Add a number of stones to the mancala.
+     *
+     * @param player the player to whose mancala the stones will be added
+     * @param stones the stones which should be added
+     */
+    public void addMancala(final Player player, final int stones) {
+        board[getMancalaLocation(player)] += stones;
+    }
 
-	public void addStone(final Player player, final int pit) {
-		board[getOffset(player) + pit] += 1;
-	}
+    /**
+     * Adds a stone to the specified pit for the player.
+     *
+     * @param player the player whose pit will be added to
+     * @param pit	 the pit to add the stone to
+     */
+    public void addStone(final Player player, final int pit) {
+        board[getOffset(player) + pit] += 1;
+    }
 
-	public void clear() {
-		for(int i = 0; i < board.length; i++) board[i] = 0;
-	}
+    /**
+     * Clears the board.
+     */
+    public void clear() {
+        for(int i = 0; i < board.length; i++) board[i] = 0;
+    }
 
-	@Override
-	public Board clone() {
+    @Override
+    public Board clone() {
 
-		return new Board(board.clone());
-	}
+        return new Board(board.clone());
+    }
 
-	public boolean equals(final int[] board) {
-		return Arrays.equals(this.board, board);
-	}
+    /**
+     * Checks if two boards are equals.
+     * @param  b the board to compare
+     * @return   true if the boards are equal
+     */
+	public boolean equals(final Board b) {
 
-	/**
-	 * Gets the number of stones in the mancala for the player.
-	 *
-	 * @param  player the player to get
-	 * @return        the number of stones in the player's mancala
-	 */
-	public int getMancala(final Player player) {
-		return board[getMancalaLocation(player)];
-	}
+		return Arrays.equals(board, b.board);
+    }
 
-	private int getMancalaLocation(final Player player) {
-		return board.length - (Player.PLAYER == player ? 2 : 1);
-	}
 
-	private int getOffset(final Player player) {
-		return Player.PLAYER == player ? 0 : getSize();
-	}
+    /**
+     * Gets the number of stones in the mancala for the player.
+     *
+     * @param  player the player to get
+     * @return        the number of stones in the player's mancala
+     */
+    public int getMancala(final Player player) {
+        return board[getMancalaLocation(player)];
+    }
 
-	/**
-	 * Gets the size of the board in terms of the number of pits for a single
-	 * player not including mancalas.
-	 *
-	 * @return the size of the board
-	 */
-	public int getSize() {
-		return size;
-	}
+    private int getMancalaLocation(final Player player) {
+        return board.length - (Player.PLAYER == player ? 2 : 1);
+    }
 
-	/**
-	 * Gets the number of stones in the pit for the player.
-	 *
-	 * @param  player the player for which to get the stones
-	 * @param  pit    the pit in which to get the stones
-	 * @return        the number of stones in the pit
-	 */
-	public int getStones(final Player player, final int pit) {
-		if(pit < 0 || getSize() <= pit) {
-			throw new IllegalArgumentException("Invalid pit = " + pit);
-		}
-		return board[getOffset(player) + pit];
-	}
+    private int getOffset(final Player player) {
+        return Player.PLAYER == player ? 0 : getSize();
+    }
 
-	public int getStones(final Player player) {
+    /**
+     * Gets the size of the board in terms of the number of pits for a single
+     * player not including mancalas.
+     *
+     * @return the size of the board
+     */
+    public int getSize() {
+        return size;
+    }
 
-		int count = 0;
+    /**
+     * Gets the number of stones for the entire player.
+     *
+     * @param  player the player
+     * @return        the number of stones for the player
+     */
+    public int getStones(final Player player) {
 
-		for(int i = 0; i < getSize(); i++) {
-			count += getStones(player, i);
-		}
+        int count = 0;
 
-		return count;
-	}
+        for(int i = 0; i < getSize(); i++) {
+            count += getStones(player, i);
+        }
 
-	public Player getWinner() {
-		if(getMancala(Player.PLAYER) == getMancala(Player.OPPONENT)) {
-			return null;
-		} else if(getMancala(Player.PLAYER) > getMancala(Player.OPPONENT)) {
-			return Player.PLAYER;
-		} else {
-			return Player.OPPONENT;
-		}
-	}
+        return count;
+    }
 
-	/**
-	 * Checks if the game is complete.
-	 *
-	 * @return {@code true} if the game is complete
-	 */
-	public boolean isComplete() {
-		for(int i = 0; i < getSize(); i++) {
-			if(getStones(Player.PLAYER, i) != 0) return false;
-			if(getStones(Player.OPPONENT, i) != 0) return false;
-		}
+    /**
+     * Gets the number of stones in the pit for the player.
+     *
+     * @param  player the player for which to get the stones
+     * @param  pit    the pit in which to get the stones
+     * @return        the number of stones in the pit
+     */
+    public int getStones(final Player player, final int pit) {
+        if(pit < 0 || getSize() <= pit) {
+            throw new IllegalArgumentException("Invalid pit = " + pit);
+        }
+        return board[getOffset(player) + pit];
+    }
 
-		return true;
-	}
+    /**
+     * Gets the valid moves for a player.
+     *
+     * @param  player the player for whom to get the valid moves
+     * @return        the valid moves
+     */
+    public List<Integer> getValidMoves(final Player player) {
 
-	public boolean isSideEmpty(final Player player) {
+    	final List<Integer> moves = new ArrayList<>();
 
-		for(int i = 0; i < getSize(); i++) {
-			if(getStones(player, i) != 0) return false;
-		}
+    	for(int i = 0; i < getSize(); i++) {
+    		if(isValidMove(player, i)) moves.add(i);
+    	}
 
-		return true;
-	}
+    	return moves;
+    }
 
-	public boolean isValidMove(final Player player, final int pit) {
-		return 0 <= pit && pit < getSize() && getStones(player, pit) != 0;
-	}
+    /**
+     * Gets the current winner for the game. Only compares mancalas.
+     *
+     * @return the winner of the game
+     */
+    public Player getWinner() {
+        if(getMancala(Player.PLAYER) == getMancala(Player.OPPONENT)) {
+            return null;
+        } else if(getMancala(Player.PLAYER) > getMancala(Player.OPPONENT)) {
+            return Player.PLAYER;
+        } else {
+            return Player.OPPONENT;
+        }
+    }
 
-	/**
-	 * Sets the number of stones in the mancala for the player.
-	 *
-	 * @param player the player to set
-	 * @param stones the number of stones to put in the player's mancala
-	 */
-	public void setMancala(final Player player, final int stones) {
-		board[getMancalaLocation(player)] = stones;
-	}
+    /**
+     * Checks if the game is complete.
+     *
+     * @return {@code true} if the game is complete
+     */
+    public boolean isComplete() {
+    	return getStones(Player.PLAYER) == 0 || getStones(Player.OPPONENT) == 0;
+    }
 
-	/**
-	 * Sets the number of stones in the pit for the player.
-	 *
-	 * @param player the player to set. Must not be {@code null}.
-	 * @param pit    the pit to in which to set the stones. 0..size - 1
-	 * @param stones the number of stones 0..1000
-	 */
-	public void setStones(final Player player, final int pit, final int stones) {
-		if(pit < 0 || getSize() <= pit) {
-			throw new IllegalArgumentException("Invalid pit = " + pit);
-		}
-		board[getOffset(player) + pit] = stones;
-	}
+    /**
+     * Checks if the specified player's side is empty.
+     *
+     * @param  player the player whose side should be checked
+     * @return        true if the players side is empty
+     */
+    public boolean isSideEmpty(final Player player) {
 
-	@Override
-	public String toString() {
+        for(int i = 0; i < getSize(); i++) {
+            if(getStones(player, i) != 0) return false;
+        }
 
-		final StringBuilder b = new StringBuilder();
+        return true;
+    }
 
-		b.append("    |");
-		for(int i = 0; i < getSize(); i++) {
-			b.append(pad(i));
-			b.append("|");
-		}
-		b.append("\n");
+    /**
+     * Checks if the specified pit is a valid move for the player.
+     *
+     * @param  player the player whose move it is
+     * @param  pit    the pit to move
+     * @return        true if it is a valid move
+     */
+    public boolean isValidMove(final Player player, final int pit) {
+        return 0 <= pit && pit < getSize() && getStones(player, pit) != 0;
+    }
 
-		b.append(pad(getMancala(Player.OPPONENT)));
-		b.append("|");
+    /**
+     * Sets the number of stones in the mancala for the player.
+     *
+     * @param player the player to set
+     * @param stones the number of stones to put in the player's mancala
+     */
+    public void setMancala(final Player player, final int stones) {
+        board[getMancalaLocation(player)] = stones;
+    }
 
-		for(int pit = 0; pit < getSize(); pit++) {
-			final int stones = getStones(Player.OPPONENT, pit);
-			b.append(pad(stones));
-			b.append("|");
-		}
+    /**
+     * Sets the number of stones in the pit for the player.
+     *
+     * @param player the player to set. Must not be {@code null}.
+     * @param pit    the pit to in which to set the stones. 0..size - 1
+     * @param stones the number of stones 0..1000
+     */
+    public void setStones(final Player player, final int pit, final int stones) {
+        if(pit < 0 || getSize() <= pit) {
+            throw new IllegalArgumentException("Invalid pit = " + pit);
+        }
+        board[getOffset(player) + pit] = stones;
+    }
 
-		b.append(pad(getMancala(Player.PLAYER)));
-		b.append("\n");
-		b.append("    |");
+    @Override
+    public String toString() {
 
-		for(int pit = 0; pit < getSize(); pit++) {
-			final int stones = getStones(Player.PLAYER, pit);
-			b.append(pad(stones));
-			b.append("|");
-		}
+        final StringBuilder b = new StringBuilder();
 
-		b.append("\n");
+        b.append("    |");
+        for(int i = 0; i < getSize(); i++) {
+            b.append(pad(i));
+            b.append("|");
+        }
+        b.append("\n");
 
-		return b.toString();
-	}
+        b.append(pad(getMancala(Player.OPPONENT)));
+        b.append("|");
+
+        for(int pit = 0; pit < getSize(); pit++) {
+            final int stones = getStones(Player.OPPONENT, pit);
+            b.append(pad(stones));
+            b.append("|");
+        }
+
+        b.append(pad(getMancala(Player.PLAYER)));
+        b.append("\n");
+        b.append("    |");
+
+        for(int pit = 0; pit < getSize(); pit++) {
+            final int stones = getStones(Player.PLAYER, pit);
+            b.append(pad(stones));
+            b.append("|");
+        }
+
+        b.append("\n");
+
+        return b.toString();
+    }
 
 }

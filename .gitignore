@@ -44,3 +44,4 @@ Temporary Items
 homework-1/output.txt
 *.pyc
 *.pyc
+*/__pycache__

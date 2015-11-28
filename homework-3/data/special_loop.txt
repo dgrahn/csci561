@@ -1,0 +1,7 @@
+1
+A(John)
+4
+B(x) ^ C(x) => A(x)
+B(John)
+D(x) => C(x)
+C(x) => D(x)

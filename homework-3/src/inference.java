@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Dan Grahn
  */
-public class Inference {
+public class inference {
 
 	private final KnowledgeBase kb = new KnowledgeBase();
 
@@ -22,7 +22,7 @@ public class Inference {
 	 * @param  path the path to the file
 	 * @throws IOException
 	 */
-	public Inference(final Path path) throws IOException {
+	public inference(final Path path) throws IOException {
 
 		final List<String> lines = Files.readAllLines(path);
 
@@ -42,22 +42,19 @@ public class Inference {
 		for(final String q : queries) {
 			final Sentence s = new Sentence(q);
 			final List<Substitution> result = new BackwardChaining(kb).ask(s);
-			writer.write(!result.isEmpty() + "\n");
+			writer.write(Boolean.toString(!result.isEmpty()).toUpperCase() + "\r\n");
 			writer.flush();
-			//System.out.println(s + " ==> " + result);
+			System.out.println(s + " ==> " + result);
 		}
 
 		writer.close();
+		System.out.println("Done");
 	}
 
 
 	public static void main(final String[] args) throws IOException {
 
-		//for(int i = 0; i <= 1000; i++) {
-		//	System.out.println("Horse(X" + i + ",X" + (i + 1) + ")");
-		//}
-
-		new Inference(new File(args[1]).toPath());
+		new inference(new File(args[1]).toPath());
 	}
 
 }

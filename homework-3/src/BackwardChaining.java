@@ -35,15 +35,15 @@ public class BackwardChaining {
 			return Arrays.asList(s);
 		}
 
-		//q’ <- Subst(@,First(goals))
+		//q' <- Subst(@,First(goals))
 		final Predicate qp = goals.get(0).apply(s);
 
-		//for each sentence r in KB where STANDARDIZE-APART(r)=(p1 ^…^pn => q)
+		//for each sentence r in KB where STANDARDIZE-APART(r)=(p1 ^...^pn => q)
 		for(final Sentence rule : kb.getRulesForGoal(qp)) {
 
 			rule.standardize();
 
-			//and @’ <- Unify (q,q’) succeeds
+			//and @' <- Unify (q,q') succeeds
 			final Substitution sp = Unifier.unify(rule.getImplication(), qp);
 			if(sp == null) continue;
 
@@ -69,7 +69,7 @@ public class BackwardChaining {
 			for(final Predicate p : rule.getConditions()) newGoals.add(p.apply(sp).apply(s));
 			for(final Predicate p : goals.subList(1, goals.size())) newGoals.add(p.apply(sp).apply(s));
 
-			// new_sub <- Compose(@’,@)
+			// new_sub <- Compose(@',@)
 			final Substitution newSub = sp.clone();
 			for(final Variable v : s.keySet()) newSub.put(v, s.get(v));
 

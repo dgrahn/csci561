@@ -1,6 +1,7 @@
 package us.grahn.mancala;
 
 import us.grahn.mancala.agents.Agent;
+import us.grahn.mancala.agents.AlphaBetaAgent;
 import us.grahn.mancala.agents.HumanAgent;
 
 /**
@@ -24,9 +25,11 @@ public class Game {
         final int MAX = 1;
 
         for(int i = 1; i < MAX + 1; i++) {
-            final Game game = new Game(Board.random(), Player.PLAYER);
+            //final Game game = new Game(Board.random(), Player.PLAYER);
+        	final Game game = new Game();
             game.setAgent(Player.PLAYER, new HumanAgent());
-            game.setAgent(Player.OPPONENT, new HumanAgent());
+            game.setAgent(Player.OPPONENT, new AlphaBetaAgent(10));
+            game.setDebug(true);
 
             try {
                 game.play();
